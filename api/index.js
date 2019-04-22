@@ -17,6 +17,7 @@ const start = async port => {
   const server = new ApolloServer({
     typeDefs,
     context,
+    introspection: true,
     mocks: true
   });
 
