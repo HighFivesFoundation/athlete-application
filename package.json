@@ -6,7 +6,8 @@
   "scripts": {
     "install": "cd ./api; npm i; cd ../client; npm i; cd ..;",
     "postinstall": "cd ./client; npm run build; cd ..;",
-    "start": "node ./api"
+    "start": "node ./api",
+    "test": "cucumber-js --require-module @babel/register --require-module @babel/preset-env --require-module @babel/polyfill --require-module dotenv/config"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,20 @@
   "bugs": {
     "url": "https://github.com/MoonTahoe/working-samples/issues"
   },
-  "homepage": "http://athlete-applicaiton.herokuapp.com"
+  "homepage": "http://athlete-applicaiton.herokuapp.com",
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.0",
+    "chai": "^4.2.0",
+    "cucumber": "^5.1.0",
+    "cucumber-pretty": "^1.5.0",
+    "dotenv": "^7.0.0",
+    "graphql": "^14.2.1",
+    "node-fetch": "^2.3.0"
+  },
+  "dependencies": {
+    "apollo-boost": "^0.3.1"
+  }
 }
