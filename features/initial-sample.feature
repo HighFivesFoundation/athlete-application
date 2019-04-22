@@ -9,6 +9,7 @@ Feature: Initial Sample
                 me {
                     name {
                         first
+                        last
                     }
                 }
             }
@@ -17,7 +18,9 @@ Feature: Initial Sample
             """
             {
                 "me": {
+                    "__typename": "User",
                     "name": {
+                        "__typename": "FullName",
                         "first": "Hello World",
                         "last": "Hello World"
                     }
