@@ -1,0 +1,20 @@
+{
+  "name": "athlete-application",
+  "version": "0.0.0",
+  "description": "The athlete application for the High Fives foundation",
+  "main": "./api/index.js",
+  "scripts": {
+    "install": "cd ./api; npm i; cd ../client; npm i; cd ..;",
+    "postinstall": "cd ./client; npm run build; cd ..;",
+    "start": "node ./api"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoonTahoe/working-samples.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MoonTahoe/working-samples/issues"
+  },
+  "homepage": "http://athlete-applicaiton.herokuapp.com"
+}

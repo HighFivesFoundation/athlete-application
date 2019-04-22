@@ -1,0 +1,522 @@
+"A custom directive for fields or types that should only be visible to administrators."
+directive @admin on FIELD_DEFINITION | OBJECT | ENUM
+
+"Custom `scalar` type that describes (and formats) a phone number."
+scalar PhoneNumber
+
+"Custom `scalar` type that describes (and formats) a date."
+scalar DateTime
+
+"The first and last name for an individual `User`."
+type FullName {
+  "A person's first name."
+  first: String
+  "A person's last name."
+  last: String
+}
+
+"A type that contains all of the core data about a `User`"
+type User {
+  "A `User`'s email address."
+  email: ID!
+  "A `User`'s full name."
+  name: FullName!
+  "A `User`'s Facebook auth token information"
+  facebookToken: String
+  "A `User`'s Google auth token information"
+  googleToken: String
+  "A `User`'s date of birth. This takes in an optional formatting string as an argument."
+  dateOfBirth(
+    "An optional string that can be sent with this field to format the date."
+    format: String
+  ): DateTime
+  "A `User`'s address. This is a full object that contains fields like city, state, and zip."
+  address: Address
+  "A `User`'s gender."
+  gender: Gender
+  "A `User`'s preferred shirt size."
+  shirtSize: Size
+  "A `User`'s application information."
+  application: Application
+  "A boolean describing whether an individual is subscribed to the mailing list."
+  mailList: Boolean
+  "A boolean describing whether an individual is an administrator. Only administrators can see this field."
+  isAdmin: Boolean @admin
+}
+
+"An enum value describing the gender identification for an applicant."
+enum Gender {
+  "The applicant identifies as male."
+  MALE
+  "The applicant identifies as female."
+  FEMALE
+  "The applicant identifies as another gender."
+  OTHER
+}
+
+"An enum value assigning the shirt size to a `User`."
+enum Size {
+  "A small-sized shirt."
+  SM
+  "A medium-sized shirt."
+  MD
+  "A large-sized shirt."
+  LG
+  "An extra-large-sized shirt."
+  XL
+  "An XXL-sized shirt."
+  XXL
+}
+
+"An object describing details about a person's address including `street`, `city`, `state`, `zip`, and more"
+type Address {
+  "The street where a person lives"
+  street: String
+  "The optional apartment/unit number where a person lives"
+  apt: String
+  "The city where a person lives"
+  city: String
+  "The state where a person lives"
+  state: State
+  "The zip code where a person lives"
+  zip: Int
+  "A person's phone number"
+  phone: PhoneNumber
+}
+
+"A type that describes both the abbreviation and full name of a `State`."
+type State {
+  "A `State`'s two letter abbreviation."
+  abbrev: ID!
+  "A `State`'s full name."
+  name: String!
+}
+
+"A type describing the details of a High Fives Application"
+type Application {
+  "An application's unique identifier"
+  id: ID!
+  "A value describing the percent of the application that has been completed. For example, if the application is 70% complete, the value returned will be 70.0."
+  percentComplete: Float
+  "A list of steps that are part of the application. For example, `Guidelines`, `ICU`, etc."
+  steps: [ApplicationStep!]!
+  "The date that the applicant started filling out the application."
+  dateStarted: DateTime
+  "The date that the applicant started submitted the application."
+  dateSubmitted: DateTime
+  "The date of the applicant's injury."
+  dateOfInjury(
+    "An optional string that can be sent with this field to format the date"
+    format: String
+  ): DateTime
+  "The status of the application. Choose from the options in the `ApplicationStatus` enumerator."
+  status: ApplicationStatus
+  "The date/time when the application was last saved."
+  lastSave(
+    "An optional string that can be sent with this field to format the date"
+    format: String
+  ): DateTime
+  "An integer value describing the number of times a person has applied for a grant. If the applicant has applied twice before, the value is `2`."
+  numberOfSubmissions: Int
+  "The User associated with the application"
+  user: User! @admin
+  "A type describing the decision of the board on whether the applicant can become a High Fives athlete."
+  boardDecision: BoardDecision @admin
+}
+
+"An interface describing a step in the application process. This is the base class for a step. Then the interface will be implemented multiple times for each step or each page."
+interface ApplicationStep {
+  "The ID of the step in the application process."
+  id: ID!
+  "The name of the step in the application process."
+  name: String!
+  "The description of the step in the application process."
+  description: String
+  "A boolean describing whether or not this step has been started."
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed."
+  complete: Boolean!
+  "The route/url for this step."
+  url: String!
+}
+
+"The step in the application process describing funding details."
+type Funding implements ApplicationStep {
+  "The ID for the `Funding` step"
+  id: ID!
+  "The name of the `Funding` step"
+  name: String!
+  "The description of the `Funding` step"
+  description: String
+  "A boolean describing whether or not this step has been started"
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed"
+  complete: Boolean!
+  "The route/url for this step"
+  url: String!
+  "The `FundingCategory` that is assigned to this application. Choose an option from the `FundingCategory` enum."
+  category: FundingCategory!
+  "The resources of the `FundingCategory`"
+  resources: String
+  "The amount of money requested"
+  amount: String
+}
+
+"A list of the possible funding category options"
+enum FundingCategory {
+  "The applicant is requesting funds for healing network benefits like acupuncture, massage, alternative healing, chiropractic, etc."
+  HEALING_NETWORK
+  "The applicant is requesting funds for living expenses like rent, mortgage, and home modifications."
+  LIVING_EXPENSES
+  "The applicant is requesting funds for adaptive equipment like AFOs, KFOs, walkers, canes, and more."
+  ADAPTIVE_EQUIPMENT
+  "The applicant is requesting funds for winter equipment like skis/snowboards, clothing, protective gear, bindings, boots, or mountaineering equipment."
+  WINTER_EQUIPMENT
+  "The applicant is requesting funds to ensure that they can maintain insurance coverage."
+  INSURANCE
+  "The applicant is requesting funds for special disabled sports programs that will enable the applicant to pursue their dream in the action sports community."
+  PROGRAMS
+  "The applicant is requesting funds for health services like supplements, vitamins, holistic medicine, gym membership, and more."
+  HEALTH
+  "The applicant is requesting funds for travel related to rehabilitation or competition in approved events."
+  TRAVEL
+}
+
+"The step in the application process describing guidelines"
+type Guidelines implements ApplicationStep {
+  "The ID for the Guidelines step"
+  id: ID!
+  "The name for the Guidelines step"
+  name: String!
+  "The description of the step in the application process"
+  description: String
+  "A boolean describing whether or not this step has been started"
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed"
+  complete: Boolean!
+  "The route/url for this step"
+  url: String!
+  "If this person is from US/Canada, the boolean value will be true. If not, it will be false."
+  usOrCanadaResident: Boolean!
+  "A boolean that describes whether this injury is the result of a degenerative disease"
+  degenerativeDisease: Boolean!
+  "A boolean that describes whether the person has current health coverage"
+  healthCoverage: Boolean!
+  "A boolean that describes whether the person intends to return to sports"
+  returnToSports: Boolean!
+}
+
+"The step in the application process describing injury information"
+type InjuryInfo implements ApplicationStep {
+  "The ID for the InjuryInfo step"
+  id: ID!
+  "The name for the InjuryInfo step"
+  name: String!
+  "The description of the step in the application process"
+  description: String
+  "A boolean describing whether or not this step has been started"
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed"
+  complete: Boolean!
+  "The route/url for this step"
+  url: String!
+  "An enum value (`InjuryType`) describing the category of injury (i.e. a TBI? a spinal cord injury?)"
+  injuryType: InjuryType!
+  "An enum value (`InjuryLevel`) describing the level of injury (i.e. T1? T6?)"
+  injuryLevel: InjuryLevel
+  "An enum value (`SpinalInjuryType`) describing the type of spinal injury (i.e. para? tetra?)"
+  spinalInjuryType: SpinalInjuryType
+  "An enum value (`InjuryCause`) describing the cause of the injury"
+  injuryCause: InjuryCause!
+  "A description of the injury"
+  injuryDescription: String!
+  "A description of the individual's recovery goals"
+  recoveryGoals: String!
+  "A description of the methods with which the individual hopes to achieve these recovery goals"
+  reachingRecoveryGoals: String!
+}
+
+"The step in the application process where the applicant describes any stay in the ICU"
+type ICU implements ApplicationStep {
+  "The ID for the ICU step"
+  id: ID!
+  "The name of the ICU step"
+  name: String!
+  "The description of the step in the application process"
+  description: String
+  "A boolean describing whether or not this step has been started"
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed"
+  complete: Boolean!
+  "The route/url for this step"
+  url: String!
+  "The number of days that a person spent in the ICU"
+  daysInICU: Int!
+  "The name of the hospital where the individual spent their ICU stay"
+  nameOfHospital: String
+  "The number of days the individual spent in in-patient rehab"
+  daysInInpatientRehab: Int!
+  "The name of the rehab hospital where the individual stayed"
+  nameOfRehabHospital: String
+}
+
+"The step in the application process where the applicant describes the circumstances of their injury"
+type Circumstances implements ApplicationStep {
+  "The ID for the Circumstances step"
+  id: ID!
+  "The name of the Circumstances step"
+  name: String!
+  "The description of the step in the application process"
+  description: String
+  "A boolean describing whether or not this step has been started"
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed"
+  complete: Boolean!
+  "The route/url for this step"
+  url: String!
+  "A boolean describing whether a person was participating in a sport at the time of injury"
+  participatingInSport: Boolean
+}
+
+"The step in the application process where the applicant provides their personal information"
+type PersonalInfo implements ApplicationStep {
+  "The ID for the PersonalInfo step"
+  id: ID!
+  "The name of the PersonalInfo step"
+  name: String!
+  "The description of the step in the application process"
+  description: String
+  "A boolean describing whether or not this step has been started"
+  started: Boolean!
+  "A boolean describing whether or not this step has been completed"
+  complete: Boolean!
+  "The route/url for this step"
+  url: String!
+  "A boolean describing whether the individual is a paid professional in their sport"
+  paidProfessional: Boolean!
+  "A boolean describing whether the individual is a participant in a club sport"
+  club: Boolean!
+  "A boolean describing whether the individual is a participant is a recipient of social security"
+  socialSecurity: Boolean!
+  "An individual's adjusted gross income for the previous year"
+  adjustedGrossIncome: Int!
+  "The race or ethnicity that the individual most closely identifies with"
+  raceEthnicity: [Ethnicity!]!
+}
+
+"An enumerator describing a list of possible races or ethnicities"
+enum Ethnicity {
+  "The applicant identifies as Black"
+  BLACK
+  "The applicant identifies as Asian"
+  ASIAN
+  "The applicant identifies as Caucasian"
+  CAUCASIAN
+  "The applicant identifies as Latino"
+  LATINO
+  "The applicant identifies as Middle Eastern"
+  MIDDLE_EASTERN
+  "The applicant identifies as Native American"
+  NATIVE_AMERICAN
+  "The applicant identifies as a Pacific Islander"
+  PACIFIC_ISLANDER
+  "The applicant identifies as two or more of these ethnicities"
+  TWO_OR_MORE
+  "The applicant identifies as something other than the listed choices"
+  OTHER
+}
+
+"An enumerator describing a list of possible injury types"
+enum InjuryType {
+  "An injury of the spinal cord"
+  SPINAL_CORD
+  "A traumatic brain injury"
+  TBI
+  "An amputation"
+  AMPUTATION
+  "Another type of injury"
+  OTHER
+}
+
+"An enumerator describing a list of possible injury levels"
+enum InjuryLevel {
+  "An injury of the C1 - C7"
+  C1C7
+  "An injury of the T1 - T6"
+  T1T6
+  "An injury of the T7 - T12"
+  T7T12
+  "An injury of the L1 - S1"
+  L1S1
+}
+
+"An enumerator describing a list of possible spinal injury types"
+enum SpinalInjuryType {
+  "The applicant is a complete paraplegic"
+  COMPLETEPARA
+  "The applicant is an incomplete paraplegic"
+  INCOMPLETEPARA
+  "The applicant is a complete tetraplegic"
+  COMPLETETETRA
+  "The applicant is an incomplete tetraplegic"
+  INCOMPLETETETRA
+}
+
+"An enumerator describing a list of possible injury causes"
+enum InjuryCause {
+  "The applicant was injured participating in a winter action sport"
+  WINTERACTIONSPORT
+  "The applicant was injured participating in a summer action sport"
+  SUMMERACTIONSPORT
+  "The applicant was injured participating in a motorsport"
+  MOTORSPORT
+  "The applicant was injured during military combat"
+  MILITARYCOMBAT
+  "The applicant was injured in a car accident"
+  CARACCIDENT
+  "The applicant was injured during something other than the listed choices"
+  OTHER
+}
+
+"An enumerator describing the possible list of application statuses"
+enum ApplicationStatus {
+  "The application has been started"
+  STARTED
+  "The application has been submitted"
+  SUBMITTED
+  "The application has been approved"
+  APPROVED
+  "The application has been declined"
+  DECLINED
+  "The application is part of the Military to the Mountains program"
+  M2M
+}
+
+"An enumerator describing the possible list of scoring options for applications"
+enum ScoreOption @admin {
+  "The application is scored part of Military to the Mountains program"
+  M2M
+  "The application is scored part of the discretionary budget"
+  DISCRETIONARY
+  "The application is scored part of the 'has budget' category"
+  HAVE_BUDGET
+  "The application never responded"
+  NEVER_RESPONDED
+  "The application doesn't fit the mission"
+  DOESNT_FIT_MISSION
+}
+
+"The authorization payload information including the token and user info"
+type AuthorizationPayload {
+  "A user's authorization token"
+  token: String!
+  "A user returned from the authorization process"
+  user: User!
+}
+
+"The type describing the board decision about whether to give a grant to an applicant"
+type BoardDecision @admin {
+  "The category of the board's decision"
+  category: DecisionCategory
+  "The amount granted to the applicant"
+  amount: Float
+}
+
+"An enumerator describing the decision category options"
+enum DecisionCategory {
+  "The application was approved by the board, and the athlete will be funded."
+  APPROVED
+  "The application was given discretionary funding"
+  DISCRETIONARY
+  "The application decision is pending"
+  PENDING
+  "The application was denied"
+  DENIED
+}
+
+"An enumerator used to sort applicants based on name and application status"
+enum Sorting {
+  "Sort by name"
+  NAME
+  "Sort by application status"
+  APPLICATION_STATUS
+}
+
+"An input type used to search applicants based on different criteria"
+input Searching {
+  "A string used to search applicants"
+  searchString: String
+  "A list of application statuses"
+  applicationStatus: [ApplicationStatus!]!
+  "A date used to search applicants by start date"
+  startDate: DateTime
+  "A date used to search applicants by end date"
+  endDate: DateTime
+}
+
+"An input type used to handle application pagination"
+input Paging {
+  "A value at which to start paging"
+  start: Int!
+  "A count of records to return per page"
+  count: Int!
+}
+
+"An input type used to handle application filtering (see the related `Sorting`, `Searching`, and `Paging` inputs)"
+input Filters {
+  "A value to sort by"
+  sort: Sorting
+  "A value to search by"
+  search: Searching
+  "A value to page by"
+  page: Paging
+}
+
+"The list of possible queries available on the High Fives API"
+type Query {
+  "A query that returns details about the currently authenticated and logged in user. When you are logged in, you can send this query to view details about your own account."
+  me: User
+  "A query that returns list of all users. You can also use an optional filter as an argument to sort, search, or paginate these results."
+  allUsers(
+    "An optional filter for applications: sorting, searching, and paging"
+    filters: Filters
+  ): [User!]! @admin
+  """
+  A query that returns the number of total users who are currently registered.
+  This query has an optional filter that can be used to restrict the returned values.
+  """
+  totalUsers(
+    "An optional filter for applications: sorting, searching, and paging"
+    filters: Filters
+  ): Int! @admin
+  "If you need to find a user by email, this is the best query to use. Send a unique filter to this query as an argument to filter by email."
+  findUser("A required argument to filter by email" email: ID!): User @admin
+  "A query that returns a list of applications by status. The non-nullable argument sent to this query will be an array that contains one or more application statuses. For example, sending `query { applications(status: [STARTED, SUBMITTED]) { id } }` will return all applications that are marked as started or submitted."
+  applications(
+    "A non-nullable argument for filtering applications by status"
+    status: [ApplicationStatus!]
+  ): [Application!]! @admin
+  "This query returns the number of total applications that have been submitted. The non-nullable argument sent to this query will be an array that contains one or more application statuses."
+  totalApplications(
+    "A non-nullable argument for filtering applications by status"
+    status: [ApplicationStatus]
+  ): Int! @admin
+}
+
+"The list of possible mutations available on the High Fives API"
+type Mutation {
+  "This mutation authorizes a `User`. To authorize, send an email and password. The return from this mutation will be the `AuthorizationPayload`, which will provide the authorization token and user information."
+  authorize(email: String!, password: String!): AuthorizationPayload
+  "This mutation is similar to the authorize mutation but instead it authorizes a `User` with Facebook. The mutation sends a code and returns the `AuthorizationPayload` with the auth token and user information."
+  authorizeWithFacebook(code: String!): AuthorizationPayload
+  "This mutation is similar to the authorize mutation but instead it authorizes a `User` with Google. The mutation sends a code and returns the `AuthorizationPayload` with the auth token and user information."
+  authorizeWithGoogle(code: String!): AuthorizationPayload
+  "This mutation is sent to create a user account. With the email and password, the account will be created. This will also return the authorization token and user information."
+  createAccount(email: String!, password: String!): AuthorizationPayload
+  "This mutation is used to save the application in its current state. When a user wants to save, this mutation will save the stepId (the current page that the application is on) and the field name (the last completed field) Then a boolean will be returned to indicate whether the save was successful."
+  save(stepId: ID, fieldName: String): Boolean!
+  "This mutation is used to submit the application in its current state. Then a boolean will be returned to indicate whether the submission was a success."
+  submitApplication: Boolean!
+  "A mutation that calculates whether an applicant should be accepted based on the inputs of the application ID, the application status, and the amount of the grant."
+  decide(id: ID!, status: ApplicationStatus!, amount: Float): Application!
+}
