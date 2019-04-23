@@ -4,7 +4,7 @@ import { PreviousNext } from "../PreviousNext";
 export const LivingExpenses = () => {
   return (
     <section>
-      <h2>Living Expenses</h2>
+      <h3>Living Expenses</h3>
       <PreviousNext prevLink="/funding" nextLink="/funding/insurance" />
     </section>
   );

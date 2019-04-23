@@ -5,28 +5,20 @@ export const PreviousNext = ({ prevLink, nextLink }) => {
   if (prevLink && nextLink) {
     return (
       <>
-        <button>
-          <Link to={prevLink}>Prev</Link>
-        </button>
-        <button>
-          <Link to={nextLink}>Next</Link>
-        </button>
+        <Link to={prevLink}>Prev</Link>
+        <Link to={nextLink}>Next</Link>
       </>
     );
   } else if (!prevLink) {
     return (
       <>
-        <button>
-          <Link to={nextLink}>Next</Link>
-        </button>
+        <Link to={nextLink}>Next</Link>
       </>
     );
   } else {
     return (
       <>
-        <button>
-          <Link to={prevLink}>Prev</Link>
-        </button>
+        <Link to={prevLink}>Prev</Link>
       </>
     );
   }

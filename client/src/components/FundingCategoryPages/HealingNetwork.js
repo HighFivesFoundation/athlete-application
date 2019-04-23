@@ -4,7 +4,7 @@ import { PreviousNext } from "../PreviousNext";
 export const HealingNetwork = () => {
   return (
     <section>
-      <h2>Healing Network</h2>
+      <h3>Healing Network</h3>
       <PreviousNext prevLink="/icu" nextLink="/funding/living-expenses" />
     </section>
   );

@@ -1,3 +1,11 @@
 import React from "react";
+import { PreviousNext } from "./PreviousNext";
 
-export const PersonalInfo = () => <h2>Personal Info</h2>;
+export const PersonalInfo = () => {
+  return (
+    <section>
+      <h1>Personal Info</h1>
+      <PreviousNext prevLink="/funding/travel" />
+    </section>
+  );
+};
