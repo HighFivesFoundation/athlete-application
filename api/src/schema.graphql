@@ -503,6 +503,18 @@ type Query {
   ): Int! @admin
 }
 
+"The input neccessary to create a new email and password user account"
+input CreateAccountInput {
+  "The new user's email address"
+  email: String!
+  "The new user's password. Passwords are encrypted before they are saved"
+  password: String!
+  "The first name of the new user"
+  first: String!
+  "The last name of the new user"
+  last: String!
+}
+
 "The list of possible mutations available on the High Fives API"
 type Mutation {
   "This mutation authorizes a `User`. To authorize, send an email and password. The return from this mutation will be the `AuthorizationPayload`, which will provide the authorization token and user information."
@@ -512,7 +524,7 @@ type Mutation {
   "This mutation is similar to the authorize mutation but instead it authorizes a `User` with Google. The mutation sends a code and returns the `AuthorizationPayload` with the auth token and user information."
   authorizeWithGoogle(code: String!): AuthorizationPayload
   "This mutation is sent to create a user account. With the email and password, the account will be created. This will also return the authorization token and user information."
-  createAccount(email: String!, password: String!): AuthorizationPayload
+  createAccount(newApplicant: CreateAccountInput!): AuthorizationPayload
   "This mutation is used to save the application in its current state. When a user wants to save, this mutation will save the stepId (the current page that the application is on) and the field name (the last completed field) Then a boolean will be returned to indicate whether the save was successful."
   save(stepId: ID, fieldName: String): Boolean!
   "This mutation is used to submit the application in its current state. Then a boolean will be returned to indicate whether the submission was a success."
