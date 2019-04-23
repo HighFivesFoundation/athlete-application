@@ -4,8 +4,8 @@ import { PreviousNext } from "../PreviousNext";
 export const Travel = () => {
   return (
     <section>
-      <h2>Travel</h2>
-      <PreviousNext prevLink="/funding/health" />
+      <h3>Travel</h3>
+      <PreviousNext prevLink="/funding/health" nextLink="/personal-info" />
     </section>
   );
 };
