@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/MoonTahoe/working-samples/issues"
   },
-  "homepage": "http://athlete-applicaiton.herokuapp.com"
+  "homepage": "http://athlete-applicaiton.herokuapp.com",
+  "dependencies": {
+    "dotenv": "^7.0.0"
+  }
 }
