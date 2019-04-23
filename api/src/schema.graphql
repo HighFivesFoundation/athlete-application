@@ -159,7 +159,7 @@ type Funding implements ApplicationStep {
   "The resources of the `FundingCategory`"
   resources: String
   "The amount of money requested"
-  amount: String
+  amount: Float
 }
 
 "A list of the possible funding category options"
@@ -526,7 +526,7 @@ type Mutation {
   "This mutation is sent to create a user account. With the email and password, the account will be created. This will also return the authorization token and user information."
   createAccount(newApplicant: CreateAccountInput!): AuthorizationPayload
   "This mutation is used to save the application in its current state. When a user wants to save, this mutation will save the stepId (the current page that the application is on) and the field name (the last completed field) Then a boolean will be returned to indicate whether the save was successful."
-  save(stepId: ID, fieldName: String): Boolean!
+  save(step: String!, field: String!, value: String!): Boolean!
   "This mutation is used to submit the application in its current state. Then a boolean will be returned to indicate whether the submission was a success."
   submitApplication: Boolean!
   "A mutation that calculates whether an applicant should be accepted based on the inputs of the application ID, the application status, and the amount of the grant."

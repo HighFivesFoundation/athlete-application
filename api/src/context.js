@@ -32,6 +32,7 @@ const createContext = async () => {
       currentUser = await applicants.findOne({ email });
     }
     return {
+      db,
       applicants,
       currentUser
     };
