@@ -6,7 +6,7 @@
   "scripts": {
     "install": "cd ./api; npm i; cd ../client; npm i; cd ..;",
     "postinstall": "cd ./client; npm run build; cd ..;",
-    "start": "node ./api",
+    "start": "node -r dotenv/config ./api/src",
     "test": "cucumber-js --require-module @babel/register --require-module @babel/preset-env --require-module @babel/polyfill --require-module dotenv/config"
   },
   "repository": {
@@ -28,6 +28,7 @@
     "cucumber-pretty": "^1.5.0",
     "dotenv": "^7.0.0",
     "graphql": "^14.2.1",
+    "mongodb": "^3.2.3",
     "node-fetch": "^2.3.0"
   },
   "dependencies": {

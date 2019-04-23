@@ -9,10 +9,10 @@ console.log(`
     ==============
     endpoint: ${process.env.GRAPHQL_ENDPOINT}
     subscriptions: ${process.env.GRAPHQL_SUBSCRIPTIONS_ENDPOINT}
+    database: ${process.env.MONGODB_URI}
 `);
 
 function CustomWorld() {
-  process.env.GITHUB_CLIENT_ID = "ABCXYZ";
   this.client = new ApolloClient({
     uri: process.env.GRAPHQL_ENDPOINT,
     onError({ response, operation }) {
@@ -21,7 +21,8 @@ function CustomWorld() {
       }
     }
   });
-  setDefaultTimeout(60 * 1000);
+
+  setDefaultTimeout(5 * 1000);
 }
 
 setWorldConstructor(CustomWorld);
