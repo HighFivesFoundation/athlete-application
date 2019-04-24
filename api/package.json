@@ -20,6 +20,7 @@
     "express": "^4.16.4",
     "graphql": "^14.1.1",
     "graphql-playground-middleware-express": "^1.7.12",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.3"
   }
 }

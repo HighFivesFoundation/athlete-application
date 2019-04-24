@@ -1,5 +1,3 @@
-const { ObjectID } = require("mongodb");
-
 const saveMutationFieldSchema = require("./mutation-save-schema.js");
 
 const checkArg = (test, message) => {
