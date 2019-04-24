@@ -1,52 +1,6 @@
 const { ObjectID } = require("mongodb");
 
-const saveMutationFieldSchema = {
-  Funding: {
-    category: /HEALING_NETWORK|LIVING_EXPENSES|ADAPTIVE_EQUIPMENT|WINTER_EQUIPMENT|INSURANCE|PROGRAMS|HEALTH|TRAVEL/,
-    resources: "string",
-    amount: "number"
-  },
-  Guidelines: {
-    usOrCanadaResident: "boolean",
-    degenerativeDisease: "boolean",
-    healthCoverage: "boolean",
-    returnToSports: "boolean"
-  },
-  InjuryInfo: {
-    injuryType: /SPINAL_CORD|TBI|AMPUTATION|OTHER/,
-    injuryLevel: /C1C7|T1T6|T7T12|L1S1/,
-    spinalInjuryType: /COMPLETEPARA|INCOMPLETEPARA|COMPLETETETRA|INCOMPLETETETRA/,
-    injuryCause: /WINTERACTIONSPORT|SUMMERACTIONSPORT|MOTORSPORT|MILITARYCOMBAT|CARACCIDENT|OTHER/,
-    injuryDescription: "string",
-    recoveryGoals: "string",
-    reachingRecoveryGoals: "string"
-  },
-  ICU: {
-    daysInICU: "number",
-    nameOfHospital: "string",
-    daysInInpatientRehab: "number",
-    nameOfRehabHospital: "string"
-  },
-  Circumstances: {
-    participatingInSport: "boolean"
-  },
-  PersonalInfo: {
-    paidProfessional: "boolean",
-    socialSecurity: "boolean",
-    adjustedGrossIncome: "number",
-    raceEthnicity: [
-      "BLACK",
-      "ASIAN",
-      "CAUCASIAN",
-      "LATINO",
-      "MIDDLE_EASTERN",
-      "NATIVE_AMERICAN",
-      "PACIFIC_ISLANDER",
-      "TWO_OR_MORE",
-      "OTHER"
-    ]
-  }
-};
+const saveMutationFieldSchema = require("./mutation-save-schema.js");
 
 const checkArg = (test, message) => {
   if (test) {
@@ -98,10 +52,33 @@ const checkField = (step, field, value) => {
 const save = async (_, { step, field, value }, { db, currentUser }) => {
   checkArg(!currentUser, `Authorization required to save data`);
   checkArg(
-    !step.match(/Funding|Guidelines|InjuryInfo|ICU|Circumstances|PersonalInfo/),
+    !step.match(
+      /Funding|Guidelines|InjuryInfo|ICU|Circumstances|PersonalInfo|User/
+    ),
     `step "${step}" is not an ApplicationStep. This field case sensitive`
   );
+
   value = checkField(step, field, value);
+
+  if (step === "User") {
+    // This is crazy, mongodb won't let me $set = { [field]: value }
+    //  but if I stringify and parse I can.
+    let $set = JSON.parse(JSON.stringify({ [field]: value }));
+    const { matchedCount, modifiedCount } = await db
+      .collection("applicants")
+      .updateOne({ _id: currentUser._id }, { $set });
+
+    if (matchedCount && modifiedCount) {
+      db.collection("applicants").updateOne(
+        { _id: currentUser._id },
+        { $set: { lastSave: new Date().toISOString() } }
+      );
+
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   let record = await db.collection(step).findOne({ userId: currentUser._id });
 
@@ -119,7 +96,16 @@ const save = async (_, { step, field, value }, { db, currentUser }) => {
       .collection(step)
       .updateOne({ userId: currentUser._id }, { $set });
 
-    return matchedCount && modifiedCount ? true : false;
+    if (matchedCount && modifiedCount) {
+      db.collection("applicants").updateOne(
+        { _id: currentUser._id },
+        { $set: { lastSave: new Date().toISOString() } }
+      );
+
+      return true;
+    } else {
+      return false;
+    }
   }
 };
 
