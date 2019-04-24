@@ -1,19 +1,15 @@
-const _steps = [
+const steps = () => [
   { type: "Funding", url: "/funding" },
   { type: "Guidelines", url: "/guidelines" },
   { type: "InjuryInfo", url: "/injury-info" },
   { type: "ICU", url: "/icu" },
-  { type: "Circumstances" },
-  { type: "PersonalInfo" }
+  { type: "Circumstances", url: "/circumstances" },
+  { type: "PersonalInfo", url: "/personal-info" }
 ];
 
 const started = async ({ type }, args, { db, currentUser }) => {
   const record = await db.collection(type).findOne({ userId: currentUser._id });
   return record ? true : false;
-};
-
-const steps = (_, args, { currentUser }) => {
-  return _steps;
 };
 
 const Funding = {
