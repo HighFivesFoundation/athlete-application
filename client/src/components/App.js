@@ -1,6 +1,7 @@
 import React from "react";
 import { Router } from "@reach/router";
 import { Header } from "./Header";
+import { Circumstances } from "./Circumstances";
 import { GeneralInfo } from "./GeneralInfo";
 import { Guidelines } from "./Guidelines";
 import { InjuryInfo } from "./InjuryInfo";
@@ -41,6 +42,7 @@ export default function App() {
           <Guidelines path="/guidelines" />
           <InjuryInfo path="/injury-info" />
           <ICU path="/icu" />
+          <Circumstances path="/circumstances" />
           <Funding path="/funding">
             <HealingNetwork path="/" />
             <LivingExpenses path="living-expenses" />
