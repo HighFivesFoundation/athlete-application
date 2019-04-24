@@ -35,13 +35,11 @@ export const Header = () => {
       <HeaderWrap>
         <img src="./images/fives-logo-2016.png" alt="high-fives-logo" />
         <nav>
-          <a href="https://highfivesfoundation.org/about" target="_blank">
-            About
-          </a>
-          <a href="#">Programs</a>
-          <a href="#">Events</a>
-          <a href="#">Apply</a>
-          <a href="#">Donate</a>
+          <a href="/#">About</a>
+          <a href="/#">Programs</a>
+          <a href="/#">Events</a>
+          <a href="/#">Apply</a>
+          <a href="/#">Donate</a>
         </nav>
       </HeaderWrap>
       <Breadcrumbs />

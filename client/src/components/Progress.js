@@ -18,6 +18,7 @@ export const Progress = () => {
         <Link to="/guidelines">Applicant Guidelines</Link>
         <Link to="/injury-info">Injury Info</Link>
         <Link to="/icu">ICU</Link>
+        <Link to="/circumstances">Circumstances</Link>
         <Link to="/funding">Funding Categories</Link>
         <Link to="/funding">Healing Network</Link>
         <Link to="/funding/living-expenses">Living Expenses</Link>
