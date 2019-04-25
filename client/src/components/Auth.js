@@ -37,6 +37,7 @@ const Container = styled.section`
     flex-grow: 1;
     display: flex;
     section {
+      border-radius: 5px;
       flex-grow: 1;
       border: solid 2px black;
       margin: 1.5em;

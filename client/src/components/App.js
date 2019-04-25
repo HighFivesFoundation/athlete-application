@@ -107,22 +107,23 @@ const GlobalStyle = createGlobalStyle`
     label {
       font-weight: bold;
     }
-    input {
-      margin-top: 0.5em;
-      margin-bottom: 1em;
-      width: 50%;
-      height: 30px;
-      border-radius: 6px;
-      display: block;
-    }
-    select {
-      margin-top: 0.5em;
-      margin-bottom: 1em;
-      width: 50%;
-      height: 30px;
-      border-radius: 6px;
-      display: block;
-    }
+  }
+
+  input {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    width: 50%;
+    height: 30px;
+    border-radius: 6px;
+    display: block;
+  }
+  select {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    width: 50%;
+    height: 30px;
+    border-radius: 6px;
+    display: block;
   }
 
 `;
