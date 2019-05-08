@@ -2,7 +2,15 @@ import React from "react";
 import { Breadcrumbs } from "./Breadcrumbs";
 import styled from "styled-components";
 
-export const Header = ({ authorized, logout = f => f }) => {
+const CurrentUser = ({ me, logout }) =>
+  me ? (
+    <div className="me">
+      {me.name.first} {me.name.last}
+      <button onClick={logout}>logout</button>
+    </div>
+  ) : null;
+
+export const Header = ({ me, authorized, logout = f => f }) => {
   return (
     <>
       <HeaderWrap>
@@ -12,7 +20,7 @@ export const Header = ({ authorized, logout = f => f }) => {
           <a href="/#">Events</a>
           <a href="/#">Donate</a>
         </nav>
-        <div>{authorized && <button onClick={logout}>logout</button>}</div>
+        {authorized && <CurrentUser me={me} logout={logout} />}
       </HeaderWrap>
       {authorized && <Breadcrumbs />}
     </>
