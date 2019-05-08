@@ -27,6 +27,7 @@ import { gql } from "apollo-boost";
 const MY_APPLICATION_QUERY = gql`
   query myApplication {
     me {
+      email
       name {
         first
         last
@@ -37,13 +38,14 @@ const MY_APPLICATION_QUERY = gql`
 
 export default function App() {
   const auth = useAuth();
-  const data = useQuery({ query: MY_APPLICATION_QUERY });
+  const [{ data }] = useQuery({ query: MY_APPLICATION_QUERY });
 
-  console.log("data: ", data);
+  console.log("who am i? ", data);
+
   return (
     <section>
       <GlobalStyle />
-      <Header {...auth} />
+      <Header {...auth} me={data ? data.me : null} />
       {!auth.authorized ? (
         <Auth {...auth} />
       ) : (
