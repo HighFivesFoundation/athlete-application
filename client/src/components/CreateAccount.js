@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { gql } from "apollo-boost";
 import { useMutation } from "../hooks";
 import styled from "styled-components";
+import { TextInput } from "./FormComponents/TextInput";
+import Button from "@material-ui/core/Button";
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount($newApplicant: CreateAccountInput!) {
@@ -50,31 +52,17 @@ export const CreateAccount = ({ login }) => {
       {!loading && (
         <>
           {errors && <p>{errors[0].message}</p>}
-          <label>First Name</label>
-          <input
-            type="text"
-            value={first}
-            onChange={e => setFirst(e.target.value)}
-          />
-          <label>Last Name</label>
-          <input
-            type="text"
-            value={last}
-            onChange={e => setLast(e.target.value)}
-          />
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <label>Password</label>
-          <input
+          <TextInput fieldName="first" onChange={setFirst} type="text" />
+          <TextInput fieldName="last" onChange={setLast} type="text" />
+          <TextInput fieldName="email" onChange={setEmail} type="email" />
+          <TextInput
+            fieldName="password"
+            onChange={setPassword}
             type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
           />
-          <button onClick={submit}>Create Account</button>
+          <Button variant="contained" onClick={submit}>
+            Create Account
+          </Button>
         </>
       )}
     </Container>
@@ -82,10 +70,16 @@ export const CreateAccount = ({ login }) => {
 };
 
 const Container = styled.section`
-  label {
-    display: block;
-  }
   button {
     display: block;
+    margin-top: 20px;
+    background-color: #62b3af;
+    color: #323e48;
+    font-weight: bold;
+  }
+
+  .field {
+    margin-top: 15px;
+    width: 100%;
   }
 `;
