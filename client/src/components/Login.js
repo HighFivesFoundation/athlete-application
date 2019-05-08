@@ -10,6 +10,7 @@ const AUTHORIZE_MUTATION = gql`
     authorize(email: $email, password: $password) {
       token
       user {
+        email
         name {
           first
           last
@@ -28,7 +29,7 @@ export const Login = ({ login }) => {
   const [password, setPassword] = useState("");
 
   if (data && data.authorize.token) {
-    login(data.authorize.token);
+    login(data.authorize.token, data.authorize.user);
   }
 
   const submit = () => {

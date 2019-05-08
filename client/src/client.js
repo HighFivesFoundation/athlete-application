@@ -1,9 +1,28 @@
-import { InMemoryCache, HttpLink, ApolloClient, split } from "apollo-boost";
+import {
+  InMemoryCache,
+  HttpLink,
+  ApolloClient,
+  ApolloLink,
+  split
+} from "apollo-boost";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 
 const cache = new InMemoryCache();
 const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI });
+const authLink = new ApolloLink((operation, forward) => {
+  if (localStorage.getItem("token")) {
+    operation.setContext(context => ({
+      headers: {
+        ...context.headers,
+        authorization: localStorage.getItem("token")
+      }
+    }));
+  }
+
+  return forward(operation);
+});
+const httpAuthLink = authLink.concat(httpLink);
 
 const wsLink = new WebSocketLink({
   uri: process.env.REACT_APP_SUBSCRIPTION_ENDPOINT,
@@ -19,7 +38,7 @@ const link = split(
     return kind === "OperationDefinition" && operation === "subscription";
   },
   wsLink,
-  httpLink
+  httpAuthLink
 );
 
 export default new ApolloClient({ cache, link });

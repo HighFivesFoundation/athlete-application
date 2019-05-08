@@ -25,6 +25,13 @@ import styled, { createGlobalStyle } from "styled-components";
 
 export default function App() {
   const auth = useAuth();
+
+  if (auth.me) {
+    console.log(auth.me.name.first, auth.me.name.last);
+  } else {
+    console.log("not logged in");
+  }
+
   return (
     <section>
       <GlobalStyle />
