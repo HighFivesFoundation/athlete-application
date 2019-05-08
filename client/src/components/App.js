@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth, useQuery } from "../hooks";
+import { useAuth } from "../hooks";
 import { Router } from "@reach/router";
 import { Header } from "./Header";
 import { Auth } from "./Auth";
@@ -22,30 +22,16 @@ import {
 import { PersonalInfo } from "./PersonalInfo";
 import { Progress } from "./Progress";
 import styled, { createGlobalStyle } from "styled-components";
-import { gql } from "apollo-boost";
-
-const MY_APPLICATION_QUERY = gql`
-  query myApplication {
-    me {
-      email
-      name {
-        first
-        last
-      }
-    }
-  }
-`;
 
 export default function App() {
   const auth = useAuth();
-  const [{ data }] = useQuery({ query: MY_APPLICATION_QUERY });
 
-  console.log("who am i? ", data);
+  console.log(auth.me ? auth.me : "not logged in");
 
   return (
     <section>
       <GlobalStyle />
-      <Header {...auth} me={data ? data.me : null} />
+      <Header {...auth} />
       {!auth.authorized ? (
         <Auth {...auth} />
       ) : (
