@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../hooks";
+import { useAuth, useQuery } from "../hooks";
 import { Router } from "@reach/router";
 import { Header } from "./Header";
 import { Auth } from "./Auth";
@@ -22,9 +22,24 @@ import {
 import { PersonalInfo } from "./PersonalInfo";
 import { Progress } from "./Progress";
 import styled, { createGlobalStyle } from "styled-components";
+import { gql } from "apollo-boost";
+
+const MY_APPLICATION_QUERY = gql`
+  query myApplication {
+    me {
+      name {
+        first
+        last
+      }
+    }
+  }
+`;
 
 export default function App() {
   const auth = useAuth();
+  const data = useQuery({ query: MY_APPLICATION_QUERY });
+
+  console.log("data: ", data);
   return (
     <section>
       <GlobalStyle />
