@@ -26,7 +26,11 @@ import styled, { createGlobalStyle } from "styled-components";
 export default function App() {
   const auth = useAuth();
 
-  console.log(auth.me ? auth.me : "not logged in");
+  if (auth.me) {
+    console.log(auth.me.name.first, auth.me.name.last);
+  } else {
+    console.log("not logged in");
+  }
 
   return (
     <section>

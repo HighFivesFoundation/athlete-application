@@ -8,6 +8,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
     createAccount(newApplicant: $newApplicant) {
       token
       user {
+        email
         name {
           first
           last
@@ -28,8 +29,7 @@ export const CreateAccount = ({ login }) => {
   const [password, setPassword] = useState("");
 
   if (data && data.createAccount.token) {
-    console.log("logging in from createAccount ", data.createAccount.token);
-    login(data.createAccount.token);
+    login(data.createAccount.token, data.createAccount.user);
   }
 
   const submit = () => {
