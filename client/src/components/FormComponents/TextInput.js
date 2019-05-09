@@ -5,6 +5,7 @@ export const TextInput = ({
   fieldName,
   onChange,
   value = "",
+  label,
   type = "text",
   ...rest
 }) => (
@@ -14,10 +15,10 @@ export const TextInput = ({
     id={fieldName}
     name={fieldName}
     type={type}
-    label={fieldName.toUpperCase()}
+    label={label ? label : fieldName}
     variant="outlined"
     // value={value}
-    onChange={e => onChange(e.target.value)}
+    // onChange={e => onChange(e.target.value)}
     {...rest}
   />
 );

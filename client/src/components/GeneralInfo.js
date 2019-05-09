@@ -1,34 +1,26 @@
 import React from "react";
 import { PreviousNext } from "./PreviousNext";
+import styled from "styled-components";
+import { TextInput } from "./FormComponents/TextInput";
 
 export const GeneralInfo = () => {
   return (
-    <section>
+    <Container>
       <h2>General Info</h2>
       <form>
-        <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" />
-        <label htmlFor="firstname">First Name</label>
-        <input type="text" name="firstname" id="firstname" />
-        <label htmlFor="lastname">Last Name</label>
-        <input type="text" name="lastname" id="lastname" />
+        <TextInput fieldName="password" type="password" />
+        <TextInput fieldName="firstname" type="text" />
+        <TextInput fieldName="lastname" type="text" />
         <label htmlFor="dateofbirth">Date of Birth</label>
         <input type="date" name="dateofbirth" id="dateofbirth" />
-        <label htmlFor="address">Address</label>
-        <input type="text" name="address" id="address" />
-        <label htmlFor="city">City</label>
-        <input type="text" name="city" id="city" />
-        <label htmlFor="state">State</label>
-        <input type="text" name="state" id="state" />
-        <label htmlFor="zip">Zip Code</label>
-        <input type="text" name="zip" id="zip" />
-        <label htmlFor="phone">Phone Number</label>
-        <input
+        <TextInput fieldName="address" type="text" />
+        <TextInput fieldName="city" type="text" />
+        <TextInput fieldName="state" type="text" />
+        <TextInput fieldName="zip" type="zip" />
+        <TextInput
+          fieldName="phone"
           type="tel"
-          name="phone"
-          id="phone"
           pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          required
         />
         <label htmlFor="gender">Gender</label>
         <select id="gender" name="gender">
@@ -48,6 +40,21 @@ export const GeneralInfo = () => {
         </select>
         <PreviousNext nextLink="/guidelines" />
       </form>
-    </section>
+    </Container>
   );
 };
+
+const Container = styled.section`
+  button {
+    display: block;
+    margin-top: 20px;
+    background-color: #e5834c;
+    color: #323e48;
+    font-weight: bold;
+  }
+
+  .field {
+    margin-top: 15px;
+    width: 100%;
+  }
+`;
