@@ -1,9 +1,11 @@
 import React from "react";
 import { PreviousNext } from "./PreviousNext";
+import styled from "styled-components";
+import { TextInput } from "./FormComponents/TextInput";
 
 export const PersonalInfo = () => {
   return (
-    <section>
+    <Container>
       <h2>Personal Info</h2>
       <form>
         <label htmlFor="paidProfessional">
@@ -34,13 +36,10 @@ export const PersonalInfo = () => {
           <option value="true">Yes</option>
           <option value="false">No</option>
         </select>
-        <label htmlFor="adjustedGrossIncome">
-          Adjusted Gross Income (reported on previous year's tax returns)
-        </label>
-        <input
+        <TextInput
+          fieldName="adjustedGrossIncome"
           type="number"
-          name="adjustedGrossIncome"
-          id="adjustedGrossIncome"
+          label="Adjusted Gross Income (reported on previous year's tax returns)"
         />
         <label htmlFor="raceEthnicity">Race & Ethnicity</label>
         <select id="raceEthnicity" name="raceEthnicity">
@@ -59,6 +58,21 @@ export const PersonalInfo = () => {
         </select>
       </form>
       <PreviousNext prevLink="/funding/travel" />
-    </section>
+    </Container>
   );
 };
+
+const Container = styled.section`
+  button {
+    display: block;
+    margin-top: 20px;
+    background-color: #e5834c;
+    color: #323e48;
+    font-weight: bold;
+  }
+
+  .field {
+    margin-top: 15px;
+    width: 90%;
+  }
+`;

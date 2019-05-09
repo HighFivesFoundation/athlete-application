@@ -1,35 +1,54 @@
 import React from "react";
 import { PreviousNext } from "./PreviousNext";
+import styled from "styled-components";
+import { TextInput } from "./FormComponents/TextInput";
 
 export const ICU = () => {
   return (
-    <section>
+    <Container>
       <h2>Intensive Care / In-Patient Information</h2>
       <form>
-        <label htmlFor="daysInICU">
-          How many days were you at the ICU? If you did not spend time in ICU,
-          please enter "0".
-        </label>
-        <input type="number" name="daysInICU" id="daysInICU" />
-        <label htmlFor="nameOfHospital">Name of ICU Hospital</label>
-        <input type="text" name="nameOfHospital" id="nameOfHospital" />
-        <label htmlFor="daysInInpatientRehab">
-          How many days were you in in-patient rehab? If you did not spend time
-          in in-patient rehab, please enter "0".
-        </label>
-        <input
+        <TextInput
+          fieldName="daysInICU"
+          id="daysInICU"
           type="number"
-          name="daysInInpatientRehab"
-          id="daysInInpatientRehab"
+          label="How many days were you at the ICU?"
         />
-        <label htmlFor="nameOfRehabHospital">Name of Rehab Hospital</label>
-        <input
+        <TextInput
+          fieldName="nameOfHospital"
+          id="nameOfHospital"
           type="text"
-          name="nameOfRehabHospital"
+          label="Name of the ICU Hospital"
+        />
+        <TextInput
+          fieldName="daysInInpatientRehab"
+          id="daysInInpatientRehab"
+          type="number"
+          label="How many days were you in in-patient rehab?"
+        />
+        <TextInput
+          fieldName="nameOfRehabHospital"
           id="nameOfRehabHospital"
+          type="text"
+          label="Name of the Rehab Hospital"
         />
         <PreviousNext prevLink="/injury-info" nextLink="/circumstances" />
       </form>
-    </section>
+    </Container>
   );
 };
+
+const Container = styled.section`
+  button {
+    display: block;
+    margin-top: 20px;
+    background-color: #e5834c;
+    color: #323e48;
+    font-weight: bold;
+  }
+
+  .field {
+    margin-top: 15px;
+    width: 90%;
+  }
+`;
