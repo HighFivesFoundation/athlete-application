@@ -29,7 +29,9 @@ const createAccount = async (
 
   let hash = bcrypt.hashSync(password, 10);
   let user = {
-    name: { first, last },
+    name: `${last}, ${first} <${email}>`,
+    firstName: first,
+    lastName: last,
     email,
     password: hash,
     dateCreated: new Date().toISOString()

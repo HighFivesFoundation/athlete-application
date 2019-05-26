@@ -16,7 +16,7 @@ export const Header = () => {
         </nav>
         {authorized && (
           <div className="me">
-            {me.name.first} {me.name.last}
+            {me.firstName} {me.lastName}
             <button onClick={logout}>logout</button>
           </div>
         )}
