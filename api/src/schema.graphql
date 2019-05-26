@@ -250,6 +250,20 @@ interface ApplicationStep {
   url: String!
 }
 
+"These are the steps in the application process with the exception of `Funding` because the `Funding` category has multiple steps."
+enum Step {
+  "This value can be used with `myApplicationStep` to select the applicant's `Guidelines`"
+  GUIDELINES
+  "This value can be used with `myApplicationStep` to select the applicant's `InjuryInfo`"
+  INJURYINFO
+  "This value can be used with `myApplicationStep` to select the applicant's `ICU`"
+  ICU
+  "This value can be used with `myApplicationStep` to select the applicant's `Circumstances`"
+  CIRCUMSTANCES
+  "This value can be used with `myApplicationStep` to select the applicant's `PersonalInfo`"
+  PERSONALINFO
+}
+
 "The step in the application process describing funding details."
 type Funding implements ApplicationStep {
   "The ID for the `Funding` step"
@@ -541,7 +555,7 @@ type Query {
   "A query that returns details about the currently authenticated and logged in user. When you are logged in, you can send this query to view details about your own account."
   me: User
   "A query that allows the client to query an individual applicaiton step for the current user."
-  myApplicationStep(step: ApplicationStep!): ApplicationStep!
+  myApplicationStep(step: Step!): ApplicationStep!
   "A query that allows the client to query an individual funding category step for the current user."
   myFundingCategory(category: FundingCategory): ApplicationStep!
 }
