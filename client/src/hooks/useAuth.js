@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import { ApolloContext } from "../ApolloContext";
 import { gql } from "apollo-boost";
 
 const ME_QUERY = gql`
@@ -15,6 +14,7 @@ const ME_QUERY = gql`
 `;
 
 export default function() {
+  // TODO: Get Client from new context
   const { client } = useContext(ApolloContext);
   const [token, setToken] = useState(window.localStorage.getItem("token"));
   const [me, setMe] = useState(null);
