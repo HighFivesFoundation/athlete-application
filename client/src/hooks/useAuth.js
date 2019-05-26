@@ -1,5 +1,6 @@
-import { useState, useEffect, useContext } from "react";
-import { gql } from "apollo-boost";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
 const ME_QUERY = gql`
   query {
@@ -13,21 +14,28 @@ const ME_QUERY = gql`
   }
 `;
 
-export default function() {
-  // TODO: Get Client from new context
-  const { client } = useContext(ApolloContext);
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  const [me, setMe] = useState(null);
+const CREATE_ACCOUNT_MUTATION = gql`
+  mutation createAccount($newApplicant: CreateAccountInput!) {
+    createAccount(newApplicant: $newApplicant) {
+      token
+      user {
+        email
+        name {
+          first
+          last
+        }
+      }
+    }
+  }
+`;
 
-  useEffect(() => {
-    client
-      .query({ query: ME_QUERY })
-      .then(({ data }) => setMe(data.me))
-      .catch(error => {
-        console.error(`useAuth hook error requesting initial data`);
-        console.error(error);
-      });
-  }, []);
+export default function() {
+  const [token, setToken] = useState(window.localStorage.getItem("token"));
+  const { loading, data, errors = [] } = useQuery(ME_QUERY);
+  const [
+    newAccount,
+    { loading: mutationLoading, error: mutationError }
+  ] = useMutation(CREATE_ACCOUNT_MUTATION);
 
   useEffect(() => {
     if (token) {
@@ -38,15 +46,32 @@ export default function() {
   });
 
   return {
-    me,
+    loading: loading || mutationLoading,
+    me: data && data.me,
+    errors: errors.length ? errors : mutationError ? [mutationError] : null,
     authorized: token && token.length > 20 ? true : false,
-    login: (token, me) => {
-      setToken(token);
-      setMe(me);
+    async createAccount({ email, password, first, last }) {
+      console.log(email, password, first, last);
+
+      const { data } = await newAccount({
+        variables: { newApplicant: { email, password, first, last } }
+      });
+
+      console.log("Mutation Success ", email, password, first, last);
+      console.log(data.createAccount);
+
+      //
+      // 1 - When we get a response, log the user in
+      //
+      // if (data && data.createAccount.token) {
+      //   login(data.createAccount.token, data.createAccount.user);
+      // }
     },
-    logout: () => {
+    login(token, me) {
+      setToken(token);
+    },
+    logout() {
       setToken(null);
-      setMe(null);
     }
   };
 }

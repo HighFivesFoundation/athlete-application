@@ -17,8 +17,8 @@ export const TextInput = ({
     type={type}
     label={label ? label : fieldName}
     variant="outlined"
-    // value={value}
-    // onChange={e => onChange(e.target.value)}
+    value={value}
+    onChange={e => onChange(e.target.value)}
     {...rest}
   />
 );

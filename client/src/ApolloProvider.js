@@ -13,12 +13,20 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 const cache = new InMemoryCache({ fragmentMatcher });
 
 const httpLink = createHttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI });
-const authLink = setContext((_, { headers }) => ({
-  headers: {
-    ...headers,
-    authorization: localStorage.getItem("token")
+const authLink = setContext((_, operation) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    return {
+      headers: {
+        ...operation.headers,
+        authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    };
+  } else {
+    return operation;
   }
-}));
+});
+
 const link = authLink.concat(httpLink);
 
 const client = new ApolloClient({ cache, link });

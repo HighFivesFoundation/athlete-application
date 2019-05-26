@@ -1,8 +1,8 @@
 import React from "react";
-//import { useAuth } from "../hooks";
+import { useAuth } from "../hooks";
 import { Router } from "@reach/router";
 import { Header } from "./Header";
-//import { Auth } from "./Auth";
+import { Auth } from "./Auth";
 import { Circumstances } from "./Circumstances";
 import { GeneralInfo } from "./GeneralInfo";
 import { Guidelines } from "./Guidelines";
@@ -24,44 +24,40 @@ import { Progress } from "./Progress";
 import styled, { createGlobalStyle } from "styled-components";
 
 export default function App() {
-  return <h1>Hello World</h1>;
+  const { authorized } = useAuth();
+
+  return (
+    <section>
+      <GlobalStyle />
+      <Header />
+      {!authorized ? (
+        <Auth />
+      ) : (
+        <Container>
+          <Router>
+            <GeneralInfo path="/" />
+            <Guidelines path="/guidelines" />
+            <InjuryInfo path="/injury-info" />
+            <ICU path="/icu" />
+            <Circumstances path="/circumstances" />
+            <Funding path="/funding">
+              <HealingNetwork path="/" />
+              <LivingExpenses path="living-expenses" />
+              <Insurance path="insurance" />
+              <AdaptiveEquipment path="adaptive-equipment" />
+              <WinterEquipment path="winter-equipment" />
+              <Programs path="programs" />
+              <Health path="health" />
+              <Travel path="travel" />
+            </Funding>
+            <PersonalInfo path="/personal-info" />
+          </Router>
+          <Progress />
+        </Container>
+      )}
+    </section>
+  );
 }
-
-// export default function App() {
-//   const auth = useAuth();
-
-//   return (
-//     <section>
-//       <GlobalStyle />
-//       <Header {...auth} />
-//       {!auth.authorized ? (
-//         <Auth {...auth} />
-//       ) : (
-//         <Container>
-//           <Router>
-//             <GeneralInfo path="/" />
-//             <Guidelines path="/guidelines" />
-//             <InjuryInfo path="/injury-info" />
-//             <ICU path="/icu" />
-//             <Circumstances path="/circumstances" />
-//             <Funding path="/funding">
-//               <HealingNetwork path="/" />
-//               <LivingExpenses path="living-expenses" />
-//               <Insurance path="insurance" />
-//               <AdaptiveEquipment path="adaptive-equipment" />
-//               <WinterEquipment path="winter-equipment" />
-//               <Programs path="programs" />
-//               <Health path="health" />
-//               <Travel path="travel" />
-//             </Funding>
-//             <PersonalInfo path="/personal-info" />
-//           </Router>
-//           <Progress />
-//         </Container>
-//       )}
-//     </section>
-//   );
-// }
 
 const GlobalStyle = createGlobalStyle`
   html,

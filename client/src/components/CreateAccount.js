@@ -1,43 +1,18 @@
 import React, { useState } from "react";
-import { gql } from "apollo-boost";
-import { useMutation } from "../hooks";
+import { useAuth } from "../hooks";
 import styled from "styled-components";
 import { TextInput } from "./FormComponents/TextInput";
 import Button from "@material-ui/core/Button";
 
-const CREATE_ACCOUNT_MUTATION = gql`
-  mutation createAccount($newApplicant: CreateAccountInput!) {
-    createAccount(newApplicant: $newApplicant) {
-      token
-      user {
-        email
-        name {
-          first
-          last
-        }
-      }
-    }
-  }
-`;
-
-export const CreateAccount = ({ login }) => {
-  const [{ loading, errors, data }, createAccount] = useMutation(
-    CREATE_ACCOUNT_MUTATION
-  );
-
+export const CreateAccount = () => {
+  const { loading, createAccount, errors } = useAuth();
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  if (data && data.createAccount.token) {
-    login(data.createAccount.token, data.createAccount.user);
-  }
-
   const submit = () => {
-    createAccount({
-      variables: { newApplicant: { email, password, first, last } }
-    });
+    createAccount({ email, password, first, last });
     setFirst("");
     setLast("");
     setEmail("");
@@ -52,11 +27,27 @@ export const CreateAccount = ({ login }) => {
       {!loading && (
         <>
           {errors && <p>{errors[0].message}</p>}
-          <TextInput fieldName="first" onChange={setFirst} type="text" />
-          <TextInput fieldName="last" onChange={setLast} type="text" />
-          <TextInput fieldName="email" onChange={setEmail} type="email" />
+          <TextInput
+            fieldName="first"
+            value={first}
+            onChange={setFirst}
+            type="text"
+          />
+          <TextInput
+            fieldName="last"
+            value={last}
+            onChange={setLast}
+            type="text"
+          />
+          <TextInput
+            fieldName="email"
+            value={email}
+            onChange={setEmail}
+            type="email"
+          />
           <TextInput
             fieldName="password"
+            value={password}
             onChange={setPassword}
             type="password"
           />

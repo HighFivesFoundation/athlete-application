@@ -1,5 +1,5 @@
 import React from "react";
-import { Login } from "./Login";
+//import { Login } from "./Login";
 import { CreateAccount } from "./CreateAccount";
 import styled from "styled-components";
 
@@ -10,8 +10,8 @@ export const Auth = ({ login = f => f }) => {
         <h1>Athlete Application</h1>
       </header>
       <div>
-        <Login login={login} />
-        <CreateAccount login={login} />
+        {/*<Login login={login} />*/}
+        <CreateAccount />
       </div>
     </Container>
   );
