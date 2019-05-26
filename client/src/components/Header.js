@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 export const Header = () => {
   const { authorized, me, logout } = useAuth();
+
   return (
     <>
       <Container>

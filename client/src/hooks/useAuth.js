@@ -45,7 +45,7 @@ export default function() {
     loading: loading || mutationLoading,
     me: data && data.me,
     errors: errors.length ? errors : mutationError ? [mutationError] : null,
-    authorized: token && token.length > 20 ? true : false,
+    authorized: data && data.me && token && (token.length > 20 ? true : false),
     async createAccount({ email, password, first, last }) {
       const { data } = await newAccount({
         variables: { newApplicant: { email, password, first, last } }
