@@ -12,6 +12,18 @@ const started = async ({ type }, args, { db, currentUser }) => {
   return record ? true : false;
 };
 
+const myApplicationStep = (_, { step }) => {
+  return {
+    started: false
+  };
+};
+
+const myFundingCategory = (_, { category }) => {
+  return {
+    started: false
+  };
+};
+
 const Funding = {
   started
 };
@@ -45,12 +57,16 @@ const Application = {
 };
 
 module.exports = {
-  Application,
-  ApplicationStep,
-  Funding,
-  Guidelines,
-  InjuryInfo,
-  ICU,
-  Circumstances,
-  PersonalInfo
+  myApplicationStep,
+  myFundingCategory,
+  Application: {
+    Application,
+    ApplicationStep,
+    Funding,
+    Guidelines,
+    InjuryInfo,
+    ICU,
+    Circumstances,
+    PersonalInfo
+  }
 };
