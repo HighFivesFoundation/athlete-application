@@ -1,6 +1,6 @@
 # High Fives Foundation Athlete Application
 
-To become a High Fives athlete, an individual must submit a grant application. In this repo, we'll build a modern, accessible form to capture all of this information.
+To become a High Fives athlete, an individual must submit a grant application. In this repo, we'll build a modern, accessible form to capture all of this information. We've already created some prelimanary [wireframes](https://app.moqups.com/BTrdKJSG6L/view/page/a41f9f74a) for the application process.
 
 For more information about the High Fives Foundation, please [check out their website](https://highfivesfoundation.com).
 
