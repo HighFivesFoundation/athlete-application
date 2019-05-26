@@ -44,6 +44,18 @@ type User {
   isAdmin: Boolean @admin
 }
 
+"The input neccessary to create a new email and password user account"
+input CreateAccountInput {
+  "The new user's email address"
+  email: String!
+  "The new user's password. Passwords are encrypted before they are saved"
+  password: String!
+  "The first name of the new user"
+  first: String!
+  "The last name of the new user"
+  last: String!
+}
+
 "An enum value describing the gender identification for an applicant."
 enum Gender {
   "The applicant identifies as male."
@@ -162,6 +174,16 @@ type Funding implements ApplicationStep {
   amount: Float
 }
 
+"These are the form fields necessary to save a new funding category with the `saveFundingCategory` mutation"
+input FundingForm {
+  "The `FundingCategory` that is assigned to this application. Choose an option from the `FundingCategory` enum."
+  category: FundingCategory!
+  "The resources of the `FundingCategory`"
+  resources: String
+  "The amount of money requested"
+  amount: Float
+}
+
 "A list of the possible funding category options"
 enum FundingCategory {
   "The applicant is requesting funds for healing network benefits like acupuncture, massage, alternative healing, chiropractic, etc."
@@ -206,6 +228,18 @@ type Guidelines implements ApplicationStep {
   returnToSports: Boolean!
 }
 
+"These are the form fields necessary to save application guidelines in the `saveGuidelines` mutation"
+input GuidelineForm {
+  "If this person is from US/Canada, the boolean value will be true. If not, it will be false."
+  usOrCanadaResident: Boolean
+  "A boolean that describes whether this injury is the result of a degenerative disease"
+  degenerativeDisease: Boolean
+  "A boolean that describes whether the person has current health coverage"
+  healthCoverage: Boolean
+  "A boolean that describes whether the person intends to return to sports"
+  returnToSports: Boolean
+}
+
 "The step in the application process describing injury information"
 type InjuryInfo implements ApplicationStep {
   "The ID for the InjuryInfo step"
@@ -236,6 +270,24 @@ type InjuryInfo implements ApplicationStep {
   reachingRecoveryGoals: String!
 }
 
+"These are the form fields necessary to save the applicant's injury information in the `saveInjuryInfo` mutation"
+input InjuryInfoForm {
+  "An enum value (`InjuryType`) describing the category of injury (i.e. a TBI? a spinal cord injury?)"
+  injuryType: InjuryType
+  "An enum value (`InjuryLevel`) describing the level of injury (i.e. T1? T6?)"
+  injuryLevel: InjuryLevel
+  "An enum value (`SpinalInjuryType`) describing the type of spinal injury (i.e. para? tetra?)"
+  spinalInjuryType: SpinalInjuryType
+  "An enum value (`InjuryCause`) describing the cause of the injury"
+  injuryCause: InjuryCause!
+  "A description of the injury"
+  injuryDescription: String
+  "A description of the individual's recovery goals"
+  recoveryGoals: String
+  "A description of the methods with which the individual hopes to achieve these recovery goals"
+  reachingRecoveryGoals: String
+}
+
 "The step in the application process where the applicant describes any stay in the ICU"
 type ICU implements ApplicationStep {
   "The ID for the ICU step"
@@ -260,6 +312,18 @@ type ICU implements ApplicationStep {
   nameOfRehabHospital: String
 }
 
+"These are the form fields necessary to save applicant ICU info in the `saveICU` mutation"
+input ICUForm {
+  "The number of days that a person spent in the ICU"
+  daysInICU: Int
+  "The name of the hospital where the individual spent their ICU stay"
+  nameOfHospital: String
+  "The number of days the individual spent in in-patient rehab"
+  daysInInpatientRehab: Int
+  "The name of the rehab hospital where the individual stayed"
+  nameOfRehabHospital: String
+}
+
 "The step in the application process where the applicant describes the circumstances of their injury"
 type Circumstances implements ApplicationStep {
   "The ID for the Circumstances step"
@@ -274,6 +338,12 @@ type Circumstances implements ApplicationStep {
   complete: Boolean!
   "The route/url for this step"
   url: String!
+  "A boolean describing whether a person was participating in a sport at the time of injury"
+  participatingInSport: Boolean
+}
+
+"These are the form fields necessary to save application circumstances in the `saveCircumstances` mutation"
+input CircumstancesForm {
   "A boolean describing whether a person was participating in a sport at the time of injury"
   participatingInSport: Boolean
 }
@@ -302,6 +372,20 @@ type PersonalInfo implements ApplicationStep {
   adjustedGrossIncome: Int!
   "The race or ethnicity that the individual most closely identifies with"
   raceEthnicity: [Ethnicity!]!
+}
+
+"These are the form fields necessary to save an applicant's personal info in the `savePersonalInfo` mutation"
+input PersonalInfoForm {
+  "A boolean describing whether the individual is a paid professional in their sport"
+  paidProfessional: Boolean
+  "A boolean describing whether the individual is a participant in a club sport"
+  club: Boolean
+  "A boolean describing whether the individual is a participant is a recipient of social security"
+  socialSecurity: Boolean
+  "An individual's adjusted gross income for the previous year"
+  adjustedGrossIncome: Int
+  "The race or ethnicity that the individual most closely identifies with"
+  raceEthnicity: [Ethnicity!]
 }
 
 "An enumerator describing a list of possible races or ethnicities"
@@ -472,19 +556,32 @@ input Filters {
   page: Paging
 }
 
+"This object is used for save mutation responses. It provides client info about what type of change was made with a save mutation"
+type SaveResponse {
+  "Wheather or not a save occured. If the data has not changed, a save will not take place"
+  saved: Boolean!
+  "An optional message that provides details about the change that was made"
+  message: String
+  "The timestamp associated with a save, if it occured"
+  timestamp: DateTime
+  "The applicaiton step data that is associated with the save, if it occured"
+  step: ApplicationStep
+}
+
 "The list of possible queries available on the High Fives API"
 type Query {
   "A query that returns details about the currently authenticated and logged in user. When you are logged in, you can send this query to view details about your own account."
   me: User
+  "A query that allows the client to query an individual applicaiton step for the current user."
+  myApplicationStep(step: ApplicationStep!): ApplicationStep!
+  "A query that allows the client to query an individual funding category step for the current user."
+  myFundingCategory(category: FundingCategory): ApplicationStep!
   "A query that returns list of all users. You can also use an optional filter as an argument to sort, search, or paginate these results."
   allUsers(
     "An optional filter for applications: sorting, searching, and paging"
     filters: Filters
   ): [User!]! @admin
-  """
-  A query that returns the number of total users who are currently registered.
-  This query has an optional filter that can be used to restrict the returned values.
-  """
+  "A query that returns the number of total users who are currently registered. This query has an optional filter that can be used to restrict the returned values."
   totalUsers(
     "An optional filter for applications: sorting, searching, and paging"
     filters: Filters
@@ -503,18 +600,6 @@ type Query {
   ): Int! @admin
 }
 
-"The input neccessary to create a new email and password user account"
-input CreateAccountInput {
-  "The new user's email address"
-  email: String!
-  "The new user's password. Passwords are encrypted before they are saved"
-  password: String!
-  "The first name of the new user"
-  first: String!
-  "The last name of the new user"
-  last: String!
-}
-
 "The list of possible mutations available on the High Fives API"
 type Mutation {
   "This mutation authorizes a `User`. To authorize, send an email and password. The return from this mutation will be the `AuthorizationPayload`, which will provide the authorization token and user information."
@@ -525,8 +610,18 @@ type Mutation {
   authorizeWithGoogle(code: String!): AuthorizationPayload
   "This mutation is sent to create a user account. With the email and password, the account will be created. This will also return the authorization token and user information."
   createAccount(newApplicant: CreateAccountInput!): AuthorizationPayload
-  "This mutation is used to save the application in its current state. When a user wants to save, this mutation will save the stepId (the current page that the application is on) and the field name (the last completed field) Then a boolean will be returned to indicate whether the save was successful."
-  save(step: String!, field: String!, value: String!): Boolean!
+  "This mutation allows athletes to save new application information on any of the funding categories."
+  saveFunding(input: FundingForm): SaveResponse!
+  "This mutation allows athletes to save new application information from the Guidelines Form."
+  saveGuidelines(input: GuidelineForm): SaveResponse!
+  "This mutation allows athletes to save new application information about their Injury."
+  saveInjuryInfo(input: InjuryInfoForm): SaveResponse!
+  "This mutation allows athletes to save new application information from the ICU Form."
+  saveICU(input: ICUForm): SaveResponse!
+  "This mutation allows athletes to save new application information about their circumstances."
+  saveCircumstances(input: CircumstancesForm): SaveResponse!
+  "This mutation allows athletes to save any personal information"
+  savePersonalInfo(input: PersonalInfoForm): SaveResponse!
   "This mutation is used to submit the application in its current state. Then a boolean will be returned to indicate whether the submission was a success."
   submitApplication: Boolean!
   "A mutation that calculates whether an applicant should be accepted based on the inputs of the application ID, the application status, and the amount of the grant."
