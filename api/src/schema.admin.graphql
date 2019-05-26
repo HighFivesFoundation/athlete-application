@@ -1,0 +1,63 @@
+"The type describing the board decision about whether to give a grant to an applicant"
+type BoardDecision {
+  "The category of the board's decision"
+  category: DecisionCategory
+  "The amount granted to the applicant"
+  amount: Float
+}
+
+"An enumerator describing the possible list of scoring options for applications"
+enum ScoreOption {
+  "The application is scored part of Military to the Mountains program"
+  M2M
+  "The application is scored part of the discretionary budget"
+  DISCRETIONARY
+  "The application is scored part of the 'has budget' category"
+  HAVE_BUDGET
+  "The application never responded"
+  NEVER_RESPONDED
+  "The application doesn't fit the mission"
+  DOESNT_FIT_MISSION
+}
+
+extend type User {
+  "A boolean describing whether an individual is an administrator. Only administrators can see this field."
+  isAdmin: Boolean
+}
+
+extend type Application {
+  "The User associated with the application"
+  user: User!
+  "A type describing the decision of the board on whether the applicant can become a High Fives athlete."
+  boardDecision: BoardDecision
+}
+
+extend type Query {
+  "A query that returns list of all users. You can also use an optional filter as an argument to sort, search, or paginate these results."
+  allUsers(
+    "An optional filter for applications: sorting, searching, and paging"
+    filters: Filters
+  ): [User!]!
+  "A query that returns the number of total users who are currently registered. This query has an optional filter that can be used to restrict the returned values."
+  totalUsers(
+    "An optional filter for applications: sorting, searching, and paging"
+    filters: Filters
+  ): Int!
+  "If you need to find a user by email, this is the best query to use. Send a unique filter to this query as an argument to filter by email."
+  findUser("A required argument to filter by email" email: ID!): User
+  "A query that returns a list of applications by status. The non-nullable argument sent to this query will be an array that contains one or more application statuses. For example, sending `query { applications(status: [STARTED, SUBMITTED]) { id } }` will return all applications that are marked as started or submitted."
+  applications(
+    "A non-nullable argument for filtering applications by status"
+    status: [ApplicationStatus!]
+  ): [Application!]!
+  "This query returns the number of total applications that have been submitted. The non-nullable argument sent to this query will be an array that contains one or more application statuses."
+  totalApplications(
+    "A non-nullable argument for filtering applications by status"
+    status: [ApplicationStatus]
+  ): Int!
+}
+
+extend type Mutation {
+  "A mutation that calculates whether an applicant should be accepted based on the inputs of the application ID, the application status, and the amount of the grant."
+  decide(id: ID!, status: ApplicationStatus!, amount: Float): Application!
+}
