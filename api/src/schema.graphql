@@ -155,8 +155,10 @@ type Address {
 type User {
   "A `User`'s email address."
   email: ID!
-  "A `User`'s full name."
-  name: FullName!
+  "A `User`'s frist name."
+  firstName: String!
+  "A `User`'s last name."
+  lastName: String!
   "A `User`'s Facebook auth token information"
   facebookToken: String
   "A `User`'s Google auth token information"
@@ -188,14 +190,6 @@ input CreateAccountInput {
   first: String!
   "The last name of the new user"
   last: String!
-}
-
-"The first and last name for an individual `User`."
-type FullName {
-  "A person's first name."
-  first: String
-  "A person's last name."
-  last: String
 }
 
 "A type that describes both the abbreviation and full name of a `State`."
