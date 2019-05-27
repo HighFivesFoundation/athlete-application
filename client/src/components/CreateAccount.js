@@ -50,7 +50,7 @@ export default function CreateAccount() {
             type="email"
           />
           <TextInput
-            fieldName="password"
+            fieldName="set a password"
             value={password}
             onChange={setPassword}
             type="password"

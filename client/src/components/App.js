@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../hooks";
 import Header from "./Header";
-//import Login from "./Login";
+import Login from "./Login";
 import CreateAccount from "./CreateAccount";
 import Application from "./Application";
 import Progress from "./Progress";
@@ -20,7 +20,7 @@ export default function App() {
         </ApplicationContainer>
       ) : (
         <AuthContainer>
-          {/*<Login login={login} />*/}
+          <Login />
           <CreateAccount />
         </AuthContainer>
       )}
