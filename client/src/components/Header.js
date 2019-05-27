@@ -3,7 +3,7 @@ import { useAuth } from "../hooks";
 import { Breadcrumbs } from "./Breadcrumbs";
 import styled from "styled-components";
 
-export const Header = () => {
+export default function Header() {
   const { authorized, me, logout } = useAuth();
 
   return (
@@ -25,7 +25,7 @@ export const Header = () => {
       {authorized && <Breadcrumbs />}
     </>
   );
-};
+}
 
 const Container = styled.header`
   width: 100%;

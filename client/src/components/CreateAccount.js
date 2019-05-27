@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { TextInput } from "./FormComponents/TextInput";
 import Button from "@material-ui/core/Button";
 
-export const CreateAccount = () => {
+export default function CreateAccount() {
   const { loading, createAccount, errors } = useAuth();
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
@@ -58,7 +58,7 @@ export const CreateAccount = () => {
       )}
     </Container>
   );
-};
+}
 
 const Container = styled.section`
   button {

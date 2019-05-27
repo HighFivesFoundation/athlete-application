@@ -1,7 +1,7 @@
 import React from "react";
-import { PreviousNext } from "./PreviousNext";
+import { PreviousNext } from "../PreviousNext";
 import styled from "styled-components";
-import { TextInput } from "./FormComponents/TextInput";
+import { TextInput } from "../FormComponents/TextInput";
 
 export const GeneralInfo = () => {
   return (

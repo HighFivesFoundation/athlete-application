@@ -1,63 +1,75 @@
 import React from "react";
 import { useAuth } from "../hooks";
-import { Router } from "@reach/router";
-import { Header } from "./Header";
-import { Auth } from "./Auth";
-import { Circumstances } from "./Circumstances";
-import { GeneralInfo } from "./GeneralInfo";
-import { Guidelines } from "./Guidelines";
-import { InjuryInfo } from "./InjuryInfo";
-import { ICU } from "./ICU.js";
-import { Funding } from "./Funding";
-import {
-  HealingNetwork,
-  LivingExpenses,
-  Insurance,
-  AdaptiveEquipment,
-  WinterEquipment,
-  Programs,
-  Health,
-  Travel
-} from "./FundingCategoryPages";
-import { PersonalInfo } from "./PersonalInfo";
-import { Progress } from "./Progress";
+import Header from "./Header";
+//import Login from "./Login";
+import CreateAccount from "./CreateAccount";
+import Application from "./Application";
+import Progress from "./Progress";
 import styled, { createGlobalStyle } from "styled-components";
 
 export default function App() {
   const { authorized } = useAuth();
-
   return (
     <section>
       <GlobalStyle />
       <Header />
-      {!authorized ? (
-        <Auth />
-      ) : (
-        <Container>
-          <Router>
-            <GeneralInfo path="/" />
-            <Guidelines path="/guidelines" />
-            <InjuryInfo path="/injury-info" />
-            <ICU path="/icu" />
-            <Circumstances path="/circumstances" />
-            <Funding path="/funding">
-              <HealingNetwork path="/" />
-              <LivingExpenses path="living-expenses" />
-              <Insurance path="insurance" />
-              <AdaptiveEquipment path="adaptive-equipment" />
-              <WinterEquipment path="winter-equipment" />
-              <Programs path="programs" />
-              <Health path="health" />
-              <Travel path="travel" />
-            </Funding>
-            <PersonalInfo path="/personal-info" />
-          </Router>
+      {authorized ? (
+        <ApplicationContainer>
+          <Application />
           <Progress />
-        </Container>
+        </ApplicationContainer>
+      ) : (
+        <AuthContainer>
+          {/*<Login login={login} />*/}
+          <CreateAccount />
+        </AuthContainer>
       )}
     </section>
   );
 }
+
+const ApplicationContainer = styled.div`
+  display: flex;
+  div {
+    flex-basis: 75%;
+  }
+  aside {
+    flex-basis: 25%;
+  }
+`;
+
+const AuthContainer = styled.section`
+  height: calc(100% - 5em);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+  > header {
+    padding: 1em 2em 0 2em;
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 2em;
+    }
+  }
+
+  > div {
+    flex-grow: 1;
+    display: flex;
+    section {
+      border-radius: 5px;
+      flex-grow: 1;
+      border: solid 2px black;
+      margin: 1.5em;
+      padding: 0.5em;
+      h2 {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+`;
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -127,14 +139,4 @@ const GlobalStyle = createGlobalStyle`
     display: block;
   }
 
-`;
-
-const Container = styled.div`
-  display: flex;
-  div {
-    flex-basis: 75%;
-  }
-  aside {
-    flex-basis: 25%;
-  }
 `;

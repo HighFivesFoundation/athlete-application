@@ -1,21 +1,20 @@
 import React from "react";
-import { PreviousNext } from "../PreviousNext";
+import { PreviousNext } from "../../PreviousNext";
 import styled from "styled-components";
-import { TextInput } from "../FormComponents/TextInput";
+import { TextInput } from "../../FormComponents/TextInput";
 
-export const Insurance = () => {
+export const AdaptiveEquipment = () => {
   return (
     <Container>
-      <h3>Insurance</h3>
+      <h3>Adaptive Equipment</h3>
       <form>
-        {/* <label htmlFor="INSURANCE">
+        {/* <label htmlFor="ADAPTIVE_EQUIPMENT">
           If applicable, please provide a detailed description of any resources
-          you wish to pursue funding for within the Insurance category. If you
-          are not requesting funds for this category, just enter N/A:
+          you wish to pursue funding for within the Adaptive Equipment category.
+          If you are not requesting funds for this category, just enter N/A:
         </label>
         <br />
-        <textarea rows="8" id="INSURANCE" name="INSURANCE" />
-        <br /> */}
+        <textarea rows="8" id="ADAPTIVE_EQUIPMENT" name="ADAPTIVE_EQUIPMENT" /> */}
         <TextInput
           fieldName="amount"
           type="number"
@@ -23,8 +22,8 @@ export const Insurance = () => {
         />
       </form>
       <PreviousNext
-        prevLink="/funding/living-expenses"
-        nextLink="/funding/adaptive-equipment"
+        prevLink="/funding/insurance"
+        nextLink="/funding/winter-equipment"
       />
     </Container>
   );

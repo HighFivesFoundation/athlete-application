@@ -20,7 +20,7 @@ const AUTHORIZE_MUTATION = gql`
   }
 `;
 
-export const Login = ({ login }) => {
+export default function Login() {
   const [{ data, loading, errors }, authorize] = useMutation(
     AUTHORIZE_MUTATION
   );
@@ -61,7 +61,7 @@ export const Login = ({ login }) => {
       )}
     </Container>
   );
-};
+}
 
 const Container = styled.section`
   button {

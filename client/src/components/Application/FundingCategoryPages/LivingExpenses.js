@@ -1,30 +1,28 @@
 import React from "react";
-import { PreviousNext } from "../PreviousNext";
+import { PreviousNext } from "../../PreviousNext";
 import styled from "styled-components";
-import { TextInput } from "../FormComponents/TextInput";
+import { TextInput } from "../../FormComponents/TextInput";
 
-export const AdaptiveEquipment = () => {
+export const LivingExpenses = () => {
   return (
     <Container>
-      <h3>Adaptive Equipment</h3>
+      <h3>Living Expenses</h3>
       <form>
-        {/* <label htmlFor="ADAPTIVE_EQUIPMENT">
+        {/* <label htmlFor="LIVING_EXPENSES">
           If applicable, please provide a detailed description of any resources
-          you wish to pursue funding for within the Adaptive Equipment category.
-          If you are not requesting funds for this category, just enter N/A:
+          you wish to pursue funding for within the Living Expenses category. If
+          you are not requesting funds for this category, just enter N/A:
         </label>
         <br />
-        <textarea rows="8" id="ADAPTIVE_EQUIPMENT" name="ADAPTIVE_EQUIPMENT" /> */}
+        <textarea rows="8" id="LIVING_EXPENSES" name="LIVING_EXPENSES" />
+        <br /> */}
         <TextInput
           fieldName="amount"
           type="number"
           label="What is the total dollar amount being requested for this category?"
         />
       </form>
-      <PreviousNext
-        prevLink="/funding/insurance"
-        nextLink="/funding/winter-equipment"
-      />
+      <PreviousNext prevLink="/funding" nextLink="/funding/insurance" />
     </Container>
   );
 };
