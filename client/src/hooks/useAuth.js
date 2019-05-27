@@ -25,6 +25,12 @@ const CREATE_ACCOUNT_MUTATION = gql`
   }
 `;
 
+const _setUser = (client, me) =>
+  client.writeQuery({
+    query: ME_QUERY,
+    data: { me }
+  });
+
 export default function() {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
   const { client, loading, data, errors = [] } = useQuery(ME_QUERY);
@@ -50,19 +56,15 @@ export default function() {
       const { data } = await newAccount({
         variables: { newApplicant: { email, password, first, last } }
       });
-      client.writeQuery({
-        query: ME_QUERY,
-        data: {
-          me: data.createAccount.user
-        }
-      });
+      _setUser(client, data.createAccount.user);
       setToken(data.createAccount.token);
     },
-    login(token, me) {
+    login(token) {
       setToken(token);
     },
     logout() {
       setToken(null);
+      _setUser(client, null);
     }
   };
 }
