@@ -15,12 +15,12 @@
     "graphql-tag": "^2.10.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8",
+    "react-scripts": "^3.0.1",
     "styled-components": "^4.1.3"
   },
   "scripts": {
     "codegen": "gql-gen",
-    "postinstall": "npm run gql-gen",
+    "postinstall": "npm run codegen",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
