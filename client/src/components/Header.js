@@ -1,33 +1,33 @@
 import React from "react";
+import { useAuth } from "../hooks";
 import { Breadcrumbs } from "./Breadcrumbs";
 import styled from "styled-components";
 
-const CurrentUser = ({ me, logout }) =>
-  me ? (
-    <div className="me">
-      {me.name.first} {me.name.last}
-      <button onClick={logout}>logout</button>
-    </div>
-  ) : null;
+export default function Header() {
+  const { authorized, me, logout } = useAuth();
 
-export const Header = ({ me, authorized, logout = f => f }) => {
   return (
     <>
-      <HeaderWrap>
+      <Container>
         <img src="./images/fives-logo-2016.png" alt="high-fives-logo" />
         <nav>
           <a href="/#">Programs</a>
           <a href="/#">Events</a>
           <a href="/#">Donate</a>
         </nav>
-        {authorized && <CurrentUser me={me} logout={logout} />}
-      </HeaderWrap>
+        {authorized && (
+          <div className="me">
+            {me.firstName} {me.lastName}
+            <button onClick={logout}>logout</button>
+          </div>
+        )}
+      </Container>
       {authorized && <Breadcrumbs />}
     </>
   );
-};
+}
 
-const HeaderWrap = styled.header`
+const Container = styled.header`
   width: 100%;
   background-color: black;
   color: white;

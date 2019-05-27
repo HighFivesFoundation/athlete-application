@@ -10,7 +10,7 @@ const ProgressWrap = styled.aside`
   }
 `;
 
-export const Progress = () => {
+export default function Progress() {
   return (
     <ProgressWrap>
       <nav>
@@ -32,4 +32,4 @@ export const Progress = () => {
       </nav>
     </ProgressWrap>
   );
-};
+}

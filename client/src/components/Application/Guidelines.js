@@ -1,5 +1,5 @@
 import React from "react";
-import { PreviousNext } from "./PreviousNext";
+import { PreviousNext } from "../PreviousNext";
 
 export const Guidelines = () => {
   return (

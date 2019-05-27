@@ -1,41 +1,16 @@
 import React, { useState } from "react";
-import { gql } from "apollo-boost";
-import { useMutation } from "../hooks";
+import { useAuth } from "../hooks";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { TextInput } from "./FormComponents/TextInput";
 
-const AUTHORIZE_MUTATION = gql`
-  mutation authorize($email: String!, $password: String!) {
-    authorize(email: $email, password: $password) {
-      token
-      user {
-        email
-        name {
-          first
-          last
-        }
-      }
-    }
-  }
-`;
-
-export const Login = ({ login }) => {
-  const [{ data, loading, errors }, authorize] = useMutation(
-    AUTHORIZE_MUTATION
-  );
-
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  if (data && data.authorize.token) {
-    login(data.authorize.token, data.authorize.user);
-  }
+  const { loading, login, errors } = useAuth();
 
   const submit = () => {
-    authorize({
-      variables: { email, password }
-    });
+    login({ email, password });
     setEmail("");
     setPassword("");
   };
@@ -47,9 +22,19 @@ export const Login = ({ login }) => {
       {loading && <p>authorizing...</p>}
       {!loading && (
         <>
-          {errors && <p>{errors[0].message}</p>}
-          <TextInput fieldName="email" onChange={setEmail} type="email" />
+          {errors && (
+            <p className="error">
+              {errors[0].message.replace("GraphQL error: ", "")}
+            </p>
+          )}
           <TextInput
+            fieldName="email address"
+            value={email}
+            onChange={setEmail}
+            type="email"
+          />
+          <TextInput
+            value={password}
             fieldName="password"
             onChange={setPassword}
             type="password"
@@ -61,7 +46,7 @@ export const Login = ({ login }) => {
       )}
     </Container>
   );
-};
+}
 
 const Container = styled.section`
   button {
@@ -75,5 +60,9 @@ const Container = styled.section`
   .field {
     margin-top: 15px;
     width: 100%;
+  }
+
+  p.error {
+    color: tomato;
   }
 `;
