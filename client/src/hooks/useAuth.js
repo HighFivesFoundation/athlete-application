@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
@@ -31,21 +30,18 @@ const _setUser = (client, me) =>
     data: { me }
   });
 
+const _setToken = token =>
+  token
+    ? window.localStorage.setItem("token", token)
+    : window.localStorage.removeItem("token");
+
 export default function() {
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
+  const token = window.localStorage.getItem("token");
   const { client, loading, data, errors = [] } = useQuery(ME_QUERY);
   const [
     newAccount,
     { loading: mutationLoading, error: mutationError }
   ] = useMutation(CREATE_ACCOUNT_MUTATION);
-
-  useEffect(() => {
-    if (token) {
-      window.localStorage.setItem("token", token);
-    } else {
-      window.localStorage.removeItem("token");
-    }
-  });
 
   return {
     loading: loading || mutationLoading,
@@ -53,17 +49,19 @@ export default function() {
     errors: errors.length ? errors : mutationError ? [mutationError] : null,
     authorized: data && data.me && token && (token.length > 20 ? true : false),
     async createAccount({ email, password, first, last }) {
-      const { data } = await newAccount({
-        variables: { newApplicant: { email, password, first, last } }
-      });
-      _setUser(client, data.createAccount.user);
-      setToken(data.createAccount.token);
+      try {
+        const { data } = await newAccount({
+          variables: { newApplicant: { email, password, first, last } }
+        });
+        _setToken(token);
+        _setUser(client, data.createAccount.user);
+      } catch (error) {}
     },
     login(token) {
-      setToken(token);
+      _setToken(token);
     },
     logout() {
-      setToken(null);
+      _setToken(null);
       _setUser(client, null);
     }
   };

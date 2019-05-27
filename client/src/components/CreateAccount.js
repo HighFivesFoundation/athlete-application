@@ -26,7 +26,11 @@ export default function CreateAccount() {
       {loading && <p>creating account</p>}
       {!loading && (
         <>
-          {errors && <p>{errors[0].message}</p>}
+          {errors && (
+            <p className="error">
+              {errors[0].message.replace("GraphQL error: ", "")}
+            </p>
+          )}
           <TextInput
             fieldName="first"
             value={first}
@@ -72,5 +76,9 @@ const Container = styled.section`
   .field {
     margin-top: 15px;
     width: 100%;
+  }
+
+  p.error {
+    color: tomato;
   }
 `;
