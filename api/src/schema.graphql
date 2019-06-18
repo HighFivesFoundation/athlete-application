@@ -147,22 +147,18 @@ type Address {
   state: State
   "The zip code where a person lives"
   zip: Int
-  "A person's phone number"
-  phone: PhoneNumber
 }
 
 "A type that contains all of the core data about a `User`"
 type User {
   "A `User`'s email address."
   email: ID!
+  "A `User`'s phone number"
+  phone: PhoneNumber
   "A `User`'s frist name."
   firstName: String!
   "A `User`'s last name."
   lastName: String!
-  "A `User`'s Facebook auth token information"
-  facebookToken: String
-  "A `User`'s Google auth token information"
-  googleToken: String
   "A `User`'s date of birth. This takes in an optional formatting string as an argument."
   dateOfBirth(
     "An optional string that can be sent with this field to format the date."
@@ -190,6 +186,32 @@ input CreateAccountInput {
   first: String!
   "The last name of the new user"
   last: String!
+}
+
+"These are the form fields necessary to save an applicant's general info with the `saveGeneralInfo` mutation"
+input GeneralInfoForm {
+  "The applicant's first name."
+  firstName: String
+  "The applicant's last name."
+  lastName: String
+  "The applicant's birthday."
+  dateOfBirth: DateTime
+  "The applicant's injury date."
+  dateOfInjury: DateTime
+  "The applicant's street address."
+  address: String
+  "The applicant's home town."
+  city: String
+  "The applicant's home state."
+  state: String
+  "The applicant's home zip code."
+  zip: String
+  "The applicant's phone number."
+  phone: String
+  "The applicant's gender."
+  gender: Gender
+  "The applicant's tee shirt size."
+  shirtSize: Size
 }
 
 "A type that describes both the abbreviation and full name of a `State`."
@@ -576,6 +598,8 @@ type Mutation {
   saveCircumstances(input: CircumstancesForm): SavePayload!
   "This mutation allows athletes to save any personal information"
   savePersonalInfo(input: PersonalInfoForm): SavePayload!
+  "This mutation allows athletes to save an athlete's general information"
+  saveGeneralInfo(input: GeneralInfoForm): SavePayload!
   "This mutation is used to submit the application in its current state. Then a boolean will be returned to indicate whether the submission was a success."
   submitApplication: Boolean!
 }
