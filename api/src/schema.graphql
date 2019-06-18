@@ -188,6 +188,20 @@ input CreateAccountInput {
   last: String!
 }
 
+"Information collected about the applicant's address"
+input AddressInput {
+  "The street where a person lives"
+  street: String
+  "The optional apartment/unit number where a person lives"
+  apt: String
+  "The city where a person lives"
+  city: String
+  "The state where a person lives"
+  state: String
+  "The zip code where a person lives"
+  zip: String
+}
+
 "These are the form fields necessary to save an applicant's general info with the `saveGeneralInfo` mutation"
 input GeneralInfoForm {
   "The applicant's first name."
@@ -198,14 +212,8 @@ input GeneralInfoForm {
   dateOfBirth: DateTime
   "The applicant's injury date."
   dateOfInjury: DateTime
-  "The applicant's street address."
-  address: String
-  "The applicant's home town."
-  city: String
-  "The applicant's home state."
-  state: String
-  "The applicant's home zip code."
-  zip: String
+  "The applicant's address."
+  address: AddressInput
   "The applicant's phone number."
   phone: String
   "The applicant's gender."
