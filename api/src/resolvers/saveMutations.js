@@ -1,3 +1,37 @@
+const saveGeneralInfo = async (_, { input }, { currentUser, db }) => {
+  if (!currentUser) {
+    throw new Error("Authentication required to save general information");
+  }
+
+  let { ok, value: user } = await db.collection("applicants").findOneAndUpdate(
+    { _id: currentUser._id },
+    {
+      $set: {
+        ...input,
+        dateModified: new Date().toISOString()
+      }
+    }
+  );
+
+  const saved = ok ? true : false;
+  const message = ok
+    ? `General info for ${user.firstName} ${user.lastName} updated`
+    : `General info for ${currentUser.firstName} ${
+        currentUser.lastName
+      } has not been updated`;
+
+  const timestamp = ok ? user.dateModified : null;
+
+  const step = null;
+
+  return {
+    saved,
+    message,
+    timestamp,
+    step
+  };
+};
+
 const saveFunding = (_, { input }) => {
   return {
     saved: false,
@@ -41,6 +75,7 @@ const savePersonalInfo = (_, { input }) => {
 };
 
 module.exports = {
+  saveGeneralInfo,
   saveFunding,
   saveGuidelines,
   saveInjuryInfo,
